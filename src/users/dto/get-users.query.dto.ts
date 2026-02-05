@@ -1,20 +1,14 @@
 import { Transform } from 'class-transformer';
-import {
-  IsEmail,
-  IsInt,
-  IsOptional,
-  IsString,
-  Max,
-  Min,
-} from 'class-validator';
-import { ApiPropertyOptional } from '@nestjs/swagger';
+import { IsInt, IsOptional, IsString, Max, Min } from 'class-validator';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 export class GetUsersQueryDto {
   @IsOptional()
-  @ApiPropertyOptional({
+  @ApiProperty({
     description: 'Page number.',
     example: 1,
     minimum: 1,
+    required: true,
   })
   @Transform(({ value }) => parseInt(String(value), 10))
   @IsInt()
@@ -22,38 +16,36 @@ export class GetUsersQueryDto {
   page?: number = 1;
 
   @IsOptional()
-  @ApiPropertyOptional({
+  @ApiProperty({
     description: 'Items per page.',
     example: 50,
     minimum: 1,
-    maximum: 200,
+    maximum: 1000,
+    required: true,
   })
   @Transform(({ value }) => parseInt(String(value), 10))
   @IsInt()
   @Min(1)
-  @Max(200)
+  @Max(1000)
   limit?: number = 50;
 
   @IsOptional()
   @ApiPropertyOptional({
-    description: 'Filter by name.',
-    example: 'John Doe',
+    description: 'Filter by partial name.',
   })
   @IsString()
   name?: string;
 
   @IsOptional()
   @ApiPropertyOptional({
-    description: 'Filter by email.',
-    example: 'john@example.com',
+    description: 'Filter by partial email.',
   })
-  @IsEmail()
+  @IsString()
   email?: string;
 
   @IsOptional()
   @ApiPropertyOptional({
-    description: 'Filter by phone number.',
-    example: '+380501234567',
+    description: 'Filter by partial phone number.',
   })
   @IsString()
   phone?: string;
